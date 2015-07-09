@@ -37,7 +37,6 @@ import org.springframework.core.type.AnnotationMetadata;
 import org.springframework.core.type.classreading.MetadataReader;
 import org.springframework.core.type.classreading.MetadataReaderFactory;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
-import org.springframework.core.type.filter.AssignableTypeFilter;
 import org.springframework.core.type.filter.TypeFilter;
 import org.springframework.remoting.caucho.HessianServiceExporter;
 import org.springframework.util.ReflectionUtils;
@@ -64,8 +63,6 @@ public class HessianServerScannerConfigurer implements
 
 	private ApplicationContext applicationContext;
 
-	// 实现了该接口
-	private Class<?> markerInterface;
 	// 配置了该注解
 	private Class<? extends Annotation> annotationClass;
 	// 存放spring 容器中的有接口的实现类的bean name
@@ -143,14 +140,6 @@ public class HessianServerScannerConfigurer implements
 
 	public void setIncludeAnnotationConfig(boolean includeAnnotationConfig) {
 		this.includeAnnotationConfig = includeAnnotationConfig;
-	}
-
-	public Class<?> getMarkerInterface() {
-		return markerInterface;
-	}
-
-	public void setMarkerInterface(Class<?> markerInterface) {
-		this.markerInterface = markerInterface;
 	}
 
 	public Class<? extends Annotation> getAnnotationClass() {
@@ -235,17 +224,6 @@ public class HessianServerScannerConfigurer implements
 		    // if specified, use the given annotation and / or marker interface
 		    if (HessianServerScannerConfigurer.this.annotationClass != null) {
 		      addIncludeFilter(new AnnotationTypeFilter(HessianServerScannerConfigurer.this.annotationClass));
-		      acceptAllInterfaces = false;
-		    }
-
-		    // override AssignableTypeFilter to ignore matches on the actual marker interface
-		    if (HessianServerScannerConfigurer.this.markerInterface != null) {
-		      addIncludeFilter(new AssignableTypeFilter(HessianServerScannerConfigurer.this.markerInterface) {
-		        @Override
-		        protected boolean matchClassName(String className) {
-		          return false;
-		        }
-		      });
 		      acceptAllInterfaces = false;
 		    }
 			
