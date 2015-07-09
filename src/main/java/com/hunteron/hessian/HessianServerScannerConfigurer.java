@@ -15,7 +15,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.aop.support.AopUtils;
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanNameAware;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
@@ -102,28 +101,26 @@ public class HessianServerScannerConfigurer implements
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public void afterPropertiesSet() throws Exception {
 		notNull(this.basePackage, "Property 'basePackage' is required " + beanName);
 		notNull(this.annotationClass, "Property 'annotationClass' is required " + beanName);
 		XmlWebApplicationContext xmlContext = (XmlWebApplicationContext)applicationContext;
-		BeanFactory parentBeanFactory = xmlContext.getParentBeanFactory();
-		xmlContext = parentBeanFactory != null ? (XmlWebApplicationContext)parentBeanFactory : xmlContext;
-		
-		DefaultListableBeanFactory beanFoctory = (DefaultListableBeanFactory)xmlContext.getAutowireCapableBeanFactory();
-		Field findField = ReflectionUtils.findField(beanFoctory.getClass(), "singletonObjects");
-		ReflectionUtils.makeAccessible(findField);
-		@SuppressWarnings("unchecked")
-		Map<String, Object> field = (Map<String, Object>)ReflectionUtils.getField(findField, beanFoctory);
-		
-		for (Entry<String, Object> entry : field.entrySet()) {
-			Class<?>[] interfaces = AopUtils.getTargetClass(entry.getValue()).getInterfaces();
-			for (Class<?> interfaceClass : interfaces) {
-				Annotation annotation = interfaceClass.getAnnotation(annotationClass);
-				if (annotation != null) {
-					sprCxtBeanNames.put(interfaceClass.getName(), entry.getKey());
+		do {
+			DefaultListableBeanFactory beanFoctory = (DefaultListableBeanFactory)xmlContext.getAutowireCapableBeanFactory();
+			Field findField = ReflectionUtils.findField(beanFoctory.getClass(), "singletonObjects");
+			ReflectionUtils.makeAccessible(findField);
+			Map<String, Object> field = (Map<String, Object>)ReflectionUtils.getField(findField, beanFoctory);
+			for (Entry<String, Object> entry : field.entrySet()) {
+				Class<?>[] interfaces = AopUtils.getTargetClass(entry.getValue()).getInterfaces();
+				for (Class<?> interfaceClass : interfaces) {
+					Annotation annotation = interfaceClass.getAnnotation(annotationClass);
+					if (annotation != null) {
+						sprCxtBeanNames.put(interfaceClass.getName(), entry.getKey());
+					}
 				}
 			}
-		}
+		} while ((xmlContext = (XmlWebApplicationContext)xmlContext.getParentBeanFactory()) != null);
 	}
 	
 	@Override
