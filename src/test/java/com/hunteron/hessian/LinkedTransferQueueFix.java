@@ -9,9 +9,9 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TransferQueue;
 import java.util.concurrent.locks.LockSupport;
-import java.util.Spliterator;
-import java.util.Spliterators;
-import java.util.function.Consumer;
+//import java.util.Spliterator;
+//import java.util.Spliterators;
+//import java.util.function.Consumer;
 
 import sun.misc.Unsafe;
 
@@ -887,92 +887,92 @@ public class LinkedTransferQueueFix<E> extends AbstractQueue<E>
     }
 
     /** A customized variant of Spliterators.IteratorSpliterator */
-    static final class LTQSpliterator<E> implements Spliterator<E> {
-        static final int MAX_BATCH = 1 << 25;  // max batch array size;
-        final LinkedTransferQueueFix<E> queue;
-        Node current;    // current node; null until initialized
-        int batch;          // batch size for splits
-        boolean exhausted;  // true when no more nodes
-        LTQSpliterator(LinkedTransferQueueFix<E> queue) {
-            this.queue = queue;
-        }
-
-        public Spliterator<E> trySplit() {
-            Node p;
-            final LinkedTransferQueueFix<E> q = this.queue;
-            int b = batch;
-            int n = (b <= 0) ? 1 : (b >= MAX_BATCH) ? MAX_BATCH : b + 1;
-            if (!exhausted &&
-                ((p = current) != null || (p = q.firstDataNode()) != null) &&
-                p.next != null) {
-                Object[] a = new Object[n];
-                int i = 0;
-                do {
-                    if ((a[i] = p.item) != null)
-                        ++i;
-                    if (p == (p = p.next))
-                        p = q.firstDataNode();
-                } while (p != null && i < n);
-                if ((current = p) == null)
-                    exhausted = true;
-                if (i > 0) {
-                    batch = i;
-                    return Spliterators.spliterator
-                        (a, 0, i, Spliterator.ORDERED | Spliterator.NONNULL |
-                         Spliterator.CONCURRENT);
-                }
-            }
-            return null;
-        }
-
-        @SuppressWarnings("unchecked")
-        public void forEachRemaining(Consumer<? super E> action) {
-            Node p;
-            if (action == null) throw new NullPointerException();
-            final LinkedTransferQueueFix<E> q = this.queue;
-            if (!exhausted &&
-                ((p = current) != null || (p = q.firstDataNode()) != null)) {
-                exhausted = true;
-                do {
-                    Object e = p.item;
-                    if (p == (p = p.next))
-                        p = q.firstDataNode();
-                    if (e != null)
-                        action.accept((E)e);
-                } while (p != null);
-            }
-        }
-
-        @SuppressWarnings("unchecked")
-        public boolean tryAdvance(Consumer<? super E> action) {
-            Node p;
-            if (action == null) throw new NullPointerException();
-            final LinkedTransferQueueFix<E> q = this.queue;
-            if (!exhausted &&
-                ((p = current) != null || (p = q.firstDataNode()) != null)) {
-                Object e;
-                do {
-                    e = p.item;
-                    if (p == (p = p.next))
-                        p = q.firstDataNode();
-                } while (e == null && p != null);
-                if ((current = p) == null)
-                    exhausted = true;
-                if (e != null) {
-                    action.accept((E)e);
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        public long estimateSize() { return Long.MAX_VALUE; }
-
-        public int characteristics() {
-            return Spliterator.ORDERED | Spliterator.NONNULL |
-                Spliterator.CONCURRENT;
-        }
-    }
+//    static final class LTQSpliterator<E> implements Spliterator<E> {
+//        static final int MAX_BATCH = 1 << 25;  // max batch array size;
+//        final LinkedTransferQueueFix<E> queue;
+//        Node current;    // current node; null until initialized
+//        int batch;          // batch size for splits
+//        boolean exhausted;  // true when no more nodes
+//        LTQSpliterator(LinkedTransferQueueFix<E> queue) {
+//            this.queue = queue;
+//        }
+//
+//        public Spliterator<E> trySplit() {
+//            Node p;
+//            final LinkedTransferQueueFix<E> q = this.queue;
+//            int b = batch;
+//            int n = (b <= 0) ? 1 : (b >= MAX_BATCH) ? MAX_BATCH : b + 1;
+//            if (!exhausted &&
+//                ((p = current) != null || (p = q.firstDataNode()) != null) &&
+//                p.next != null) {
+//                Object[] a = new Object[n];
+//                int i = 0;
+//                do {
+//                    if ((a[i] = p.item) != null)
+//                        ++i;
+//                    if (p == (p = p.next))
+//                        p = q.firstDataNode();
+//                } while (p != null && i < n);
+//                if ((current = p) == null)
+//                    exhausted = true;
+//                if (i > 0) {
+//                    batch = i;
+//                    return Spliterators.spliterator
+//                        (a, 0, i, Spliterator.ORDERED | Spliterator.NONNULL |
+//                         Spliterator.CONCURRENT);
+//                }
+//            }
+//            return null;
+//        }
+//
+//        @SuppressWarnings("unchecked")
+//        public void forEachRemaining(Consumer<? super E> action) {
+//            Node p;
+//            if (action == null) throw new NullPointerException();
+//            final LinkedTransferQueueFix<E> q = this.queue;
+//            if (!exhausted &&
+//                ((p = current) != null || (p = q.firstDataNode()) != null)) {
+//                exhausted = true;
+//                do {
+//                    Object e = p.item;
+//                    if (p == (p = p.next))
+//                        p = q.firstDataNode();
+//                    if (e != null)
+//                        action.accept((E)e);
+//                } while (p != null);
+//            }
+//        }
+//
+//        @SuppressWarnings("unchecked")
+//        public boolean tryAdvance(Consumer<? super E> action) {
+//            Node p;
+//            if (action == null) throw new NullPointerException();
+//            final LinkedTransferQueueFix<E> q = this.queue;
+//            if (!exhausted &&
+//                ((p = current) != null || (p = q.firstDataNode()) != null)) {
+//                Object e;
+//                do {
+//                    e = p.item;
+//                    if (p == (p = p.next))
+//                        p = q.firstDataNode();
+//                } while (e == null && p != null);
+//                if ((current = p) == null)
+//                    exhausted = true;
+//                if (e != null) {
+//                    action.accept((E)e);
+//                    return true;
+//                }
+//            }
+//            return false;
+//        }
+//
+//        public long estimateSize() { return Long.MAX_VALUE; }
+//
+//        public int characteristics() {
+//            return Spliterator.ORDERED | Spliterator.NONNULL |
+//                Spliterator.CONCURRENT;
+//        }
+//    }
 
     /**
      * Returns a {@link Spliterator} over the elements in this queue.
@@ -990,9 +990,9 @@ public class LinkedTransferQueueFix<E> extends AbstractQueue<E>
      * @return a {@code Spliterator} over the elements in this queue
      * @since 1.8
      */
-    public Spliterator<E> spliterator() {
-        return new LTQSpliterator<E>(this);
-    }
+//    public Spliterator<E> spliterator() {
+//        return new LTQSpliterator<E>(this);
+//    }
 
     /* -------------- Removal methods -------------- */
 
