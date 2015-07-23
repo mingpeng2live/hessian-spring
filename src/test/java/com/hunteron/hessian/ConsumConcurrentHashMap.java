@@ -9,6 +9,9 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * 注册一个或多个消费线程的Map. 
  * 当缓存中存在数据就跑已注册的线程
@@ -247,6 +250,9 @@ public class ConsumConcurrentHashMap<K, V> extends ConcurrentHashMap<K, V> {
 		/** The isActive, 标识线程是否运行, false停止运行， true运行. */
 		private boolean isActive = true;
 
+		/** 日志 */
+		private Logger logger = LoggerFactory.getLogger(getClass());
+		
 		/**
 		 * Instantiates a new drives runnable.
 		 */
@@ -286,13 +292,17 @@ public class ConsumConcurrentHashMap<K, V> extends ConcurrentHashMap<K, V> {
 					if (ConsumConcurrentHashMap.this.isEmpty()) {
 						notEmpty.await();
 					}
+				} catch (Exception e) {
+					logger.error("等待异常", e);
+				} finally {
+					lock.unlock();
+				}
+				try {
 					if (isNow) {
 						runnable.run();
 					}
 				} catch (Exception e) {
-					e.printStackTrace();
-				} finally {
-					lock.unlock();
+					logger.error("", e);
 				}
 			}
 		}

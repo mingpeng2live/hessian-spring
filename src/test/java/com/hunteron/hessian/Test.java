@@ -25,12 +25,12 @@ public class Test {
 				long e = 0l;
 				while((e = System.currentTimeMillis()) - s < 10 * 60 * 1000) {
 					map.put(UUID.randomUUID().toString(), RandomStringUtils.randomAlphanumeric(5));
-//					try {
-//						long nextLong = r.nextInt(10);
-//						Thread.sleep(nextLong);
-//					} catch (InterruptedException es) {
-//						es.printStackTrace();
-//					}
+					try {
+						long nextLong = r.nextInt(2); // 该地方不能为1，如果为1，就没有睡眠效果
+						Thread.sleep(nextLong);
+					} catch (InterruptedException es) {
+						es.printStackTrace();
+					}
 				}
 			}
 		};
@@ -52,6 +52,45 @@ public class Test {
 			}
 		});
 		
+		map.regsiterRunnable(new Runnable() {
+			
+			private int i = 0;
+			
+			@Override
+			public void run() {
+				i++;
+				for (Entry<String, String> entry : map.entrySet()) {
+					logger.info(i + "\t" + entry.getKey() + "\t" + entry.getValue() + "\t" + map.size());
+					map.remove(entry.getKey());
+				}
+			}
+		});
+		map.regsiterRunnable(new Runnable() {
+			
+			private int i = 0;
+			
+			@Override
+			public void run() {
+				i++;
+				for (Entry<String, String> entry : map.entrySet()) {
+					logger.info(i + "\t" + entry.getKey() + "\t" + entry.getValue() + "\t" + map.size());
+					map.remove(entry.getKey());
+				}
+			}
+		});
+		map.regsiterRunnable(new Runnable() {
+			
+			private int i = 0;
+			
+			@Override
+			public void run() {
+				i++;
+				for (Entry<String, String> entry : map.entrySet()) {
+					logger.info(i + "\t" + entry.getKey() + "\t" + entry.getValue() + "\t" + map.size());
+					map.remove(entry.getKey());
+				}
+			}
+		});
 		map.regsiterRunnable(new Runnable() {
 			
 			private int i = 0;

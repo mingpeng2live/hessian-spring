@@ -3,6 +3,7 @@ package com.hunteron.hessian;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
+@SuppressWarnings("unchecked")
 public class OptimisticQueue<T> {
 	private Object[] ringBuffer = null;
 	private AtomicInteger offerSeq = new AtomicInteger(-1);
@@ -18,13 +19,11 @@ public class OptimisticQueue<T> {
 		}
 		this.mask = 0x7FFFFFFF >> (31 - sizePower);
 	}
-
-	@SuppressWarnings("unchecked")
+	
 	private Entry nextOffer() {
 		return (Entry) ringBuffer[offerSeq.incrementAndGet() & mask];
 	}
 
-	@SuppressWarnings("unchecked")
 	private Entry nextTake() {
 		return (Entry) ringBuffer[takeSeq.incrementAndGet() & mask];
 	}
