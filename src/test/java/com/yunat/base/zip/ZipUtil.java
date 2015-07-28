@@ -21,7 +21,9 @@ public class ZipUtil {
 
 	public static void main(String[] args) throws IOException {
 //		 unZip("f:/test.zip" , "f:/");
-		zip("F:/gitreposity", "F:/hunteron.zip");
+//		zip("F:/gitreposity", "F:/hunteron.zip");
+		
+		System.out.println((char)(2));
 	}
 
 	public static void zip(String sourceDir, String zipFile) throws IOException{
