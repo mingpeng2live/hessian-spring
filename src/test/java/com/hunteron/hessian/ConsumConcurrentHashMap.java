@@ -62,7 +62,6 @@ public class ConsumConcurrentHashMap<K, V> extends ConcurrentHashMap<K, V> {
 	 */
 	public ConsumConcurrentHashMap(int initialCapacity, float loadFactor, int concurrencyLevel) {
 		super(initialCapacity, loadFactor, concurrencyLevel);
-		
 	}
 
 	/**
