@@ -8,11 +8,6 @@ package com;
  */
 public class Atithmetic {
 
-	/**
-	 * 冒泡排序，选择排序，插入排序，希尔（Shell）排序 Java的实现 2010.04.25
-	 * 
-	 * @author panguiming
-	 */
 	public static void main(String[] args) {	
 		
 		
