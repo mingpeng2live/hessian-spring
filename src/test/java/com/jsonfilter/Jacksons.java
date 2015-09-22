@@ -4,7 +4,9 @@ import java.text.DateFormat;
 import java.util.List;
 import java.util.Map;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
@@ -30,9 +32,11 @@ public class Jacksons {
 
 	private Jacksons() {
 		objectMapper = new ObjectMapper();
+//		objectMapper.enableDefaultTyping(); // 序列化的时候加入类型信息
 		// 忽略json串中存在的属性
+		objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 //		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-//		objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+		objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
 		
 		filterProvider = new SimpleFilterProvider();
 	}
@@ -43,6 +47,15 @@ public class Jacksons {
 			objectMapper.setFilters(filterProvider);
 		}
 		filterProvider.addFilter(filterName, SimpleBeanPropertyFilter.serializeAllExcept(properties));
+		return this;
+	}
+	
+	public Jacksons setFilterProvider(String filterName, SimpleBeanPropertyFilter filterpro) {
+		FilterProvider filter = objectMapper.getSerializationConfig().getFilterProvider();
+		if (filter == null) {
+			objectMapper.setFilters(filterProvider);
+		}
+		filterProvider.addFilter(filterName, filterpro);
 		return this;
 	}
 

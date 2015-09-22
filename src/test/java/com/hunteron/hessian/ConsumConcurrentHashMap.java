@@ -235,6 +235,14 @@ public class ConsumConcurrentHashMap<K, V> extends ConcurrentHashMap<K, V> {
 	 * @Description 
 	 * @Date  2015年7月17日 下午6:00:46
 	 */
+	/**
+	 * @author admaster
+	 *
+	 */
+	/**
+	 * @author admaster
+	 *
+	 */
 	protected final class ConsumerRunnable implements Runnable {
 
 		/** The run name. */
@@ -308,10 +316,17 @@ public class ConsumConcurrentHashMap<K, V> extends ConcurrentHashMap<K, V> {
 		
 		
 
+		/**
+		 * @return
+		 */
 		public boolean isNow() {
 			return isNow;
 		}
 
+		
+		/**
+		 * @param isNow
+		 */
 		public void setNow(boolean isNow) {
 			this.isNow = isNow;
 		}
