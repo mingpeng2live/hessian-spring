@@ -1,9 +1,12 @@
-package com.jsonfilter;
+package com.jsonfilter.test;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.jsonfilter.ClassUtil;
+import com.jsonfilter.Jacksons;
 
 public class FIlterTest {
 
@@ -17,10 +20,10 @@ public class FIlterTest {
 		u1.setSex("男");
 		list.add(u1);
 		User u2 = new User();
-//		u2.setAge(2);
+		u2.setAge(2);
 		u2.setCard("2");
 		u2.setName("2");
-//		u2.setSex("女");
+		u2.setSex("女");
 		list.add(u2);
 		
 		
@@ -33,20 +36,32 @@ public class FIlterTest {
 		map = new HashMap<String, Object>();
 		map.put("a", "a1");
 		map.put("b", "b1");
-		map.put("u", u2);
+		map.put("u", u2); 
 		val.add(map);
 		
 		ClassUtil cu1 = ClassUtil.getAnnotationInstance();
 		
-//		String s = Jacksons.me()
-//    			.addMixInAnnotations(Object.class, cu1.getClassObj())
-//    			.filter(cu1.getFilterName(), "card")
-//    			.readAsString(list);
 		
-		String s = Jacksons.me().addMixInAnnotations(Object.class, cu1.getClassObj())
-				.setFilterProvider(cu1.getFilterName(), FiledSerializeExceptFilter.serializeAllExcept("age", "b"))
-//				.readAsString(list);
-				.readAsString(val);
+			
+//		String s = Jacksons.me()
+//    			.addMixInAnnotations(Object.class, MyIFilter.class)
+//    			.filter("myFilter", "viewUserName", "b")
+//    			.readAsString(val);
+		
+		String s = Jacksons.me()
+    			.addMixInAnnotations(Object.class, cu1.getClassObj())
+    			.filter(cu1.getFilterName(), "name", "b")
+    			.readAsString(val);
+		
+//		String s = Jacksons.me().addMixInAnnotations(Object.class, cu1.getClassObj())
+//				.setFilterProvider(cu1.getFilterName(), FiledSerializeExceptFilter.serializeAllExcept("age", "b"))
+////				.readAsString(list);
+//				.readAsString(val);
+		
+//		String s = Jacksons.me().addMixInAnnotations(Object.class, cu1.getClassObj())
+//				.setFilterProvider(cu1.getFilterName(), FiledSerializeExceptFilter.serializeAllExcept("name", "b"))
+////				.readAsString(list);
+//				.readAsString(val);
 		System.out.println(s);
 	}
 	
@@ -56,6 +71,7 @@ public class FIlterTest {
 }
 
 class User {
+	
 	private String name;
 	private Integer age;
 	private String sex;

@@ -38,13 +38,19 @@ public class Jacksons {
 //		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
 		
+//		objectMapper.setSerializationInclusion(Include.NON_EMPTY);
+		
+		// 添加修改序列化操作
+//		objectMapper.setSerializerFactory(new MyBeanSerializerFactory(null).withSerializerModifier(new MySerializerModifier()));
+		objectMapper.setSerializerFactory(new MyBeanSerializerFactory(null));
+		
 		filterProvider = new SimpleFilterProvider();
 	}
 
 	public Jacksons filter(String filterName, String... properties) {
 		FilterProvider filter = objectMapper.getSerializationConfig().getFilterProvider();
 		if (filter == null) {
-			objectMapper.setFilters(filterProvider);
+			objectMapper.setFilterProvider(filterProvider);
 		}
 		filterProvider.addFilter(filterName, SimpleBeanPropertyFilter.serializeAllExcept(properties));
 		return this;
@@ -53,7 +59,7 @@ public class Jacksons {
 	public Jacksons setFilterProvider(String filterName, SimpleBeanPropertyFilter filterpro) {
 		FilterProvider filter = objectMapper.getSerializationConfig().getFilterProvider();
 		if (filter == null) {
-			objectMapper.setFilters(filterProvider);
+			objectMapper.setFilterProvider(filterProvider);
 		}
 		filterProvider.addFilter(filterName, filterpro);
 		return this;
@@ -65,7 +71,7 @@ public class Jacksons {
 	}
 
 	public Jacksons addMixInAnnotations(Class<?> target, Class<?> mixinSource) {  
-        objectMapper.addMixInAnnotations(target, mixinSource);  
+        objectMapper.addMixIn(target, mixinSource);  
         return this;  
     }  
 

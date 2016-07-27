@@ -48,12 +48,12 @@ public class FiledSerializeExceptFilter extends SerializeExceptFilter {
     		} else if (List.class.isAssignableFrom(pojo.getClass())) {
      			
      		} else {
-     			Field findField = ReflectionUtils.findField(pojo.getClass(), "name");
-     			ReflectionUtils.makeAccessible(findField);
-     			Object field = ReflectionUtils.getField(findField, pojo);
-     			if (field != null) {
-     				flag = field.equals(map.get("name"));
-     			}
+//     			Field findField = ReflectionUtils.findField(pojo.getClass(), "name");
+//     			ReflectionUtils.makeAccessible(findField);
+//     			Object field = ReflectionUtils.getField(findField, pojo);
+//     			if (field != null) {
+//     				flag = field.equals(map.get("name"));
+//     			}
      		}
     	}
     	
