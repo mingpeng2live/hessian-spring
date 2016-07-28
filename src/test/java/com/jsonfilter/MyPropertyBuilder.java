@@ -44,6 +44,7 @@ public class MyPropertyBuilder extends PropertyBuilder {
      *    to use for contained values (only used for properties that are
      *    of container type)
      */
+    @SuppressWarnings("deprecation")
     protected BeanPropertyWriter buildWriter(SerializerProvider prov,
             BeanPropertyDefinition propDef, JavaType declaredType, JsonSerializer<?> ser,
             TypeSerializer typeSer, TypeSerializer contentTypeSer,
@@ -76,17 +77,27 @@ public class MyPropertyBuilder extends PropertyBuilder {
         Object valueToSuppress = null;
         boolean suppressNulls = false;
 
-        JsonInclude.Include inclusion = propDef.findInclusion();
-        if ((inclusion == null)
-                || (inclusion == JsonInclude.Include.USE_DEFAULTS)) { // since 2.6
-            inclusion = _defaultInclusion;
-            if (inclusion == null) {
-                inclusion = JsonInclude.Include.ALWAYS;
-            }
+        JsonInclude.Value inclV = _defaultInclusion.withOverrides(propDef.findInclusion());
+        JsonInclude.Include inclusion = inclV.getValueInclusion();
+        if (inclusion == JsonInclude.Include.USE_DEFAULTS) { // should not occur but...
+            inclusion = JsonInclude.Include.ALWAYS;
         }
+
+        // 12-Jul-2016, tatu: [databind#1256] Need to make sure we consider type refinement
+        JavaType actualType = (serializationType == null) ? declaredType : serializationType;
+        
         switch (inclusion) {
         case NON_DEFAULT:
-            valueToSuppress = getDefaultValue(propDef.getName(), am);
+            // 11-Nov-2015, tatu: This is tricky because semantics differ between cases,
+            //    so that if enclosing class has this, we may need to values of property,
+            //    whereas for global defaults OR per-property overrides, we have more
+            //    static definition. Sigh.
+            // First: case of class specifying it; try to find POJO property defaults
+            if (_defaultInclusion.getValueInclusion() == JsonInclude.Include.NON_DEFAULT) {
+                valueToSuppress = getPropertyDefaultValue(propDef.getName(), am, actualType);
+            } else {
+                valueToSuppress = getDefaultValue(actualType);
+            }
             if (valueToSuppress == null) {
                 suppressNulls = true;
             } else {
@@ -94,12 +105,13 @@ public class MyPropertyBuilder extends PropertyBuilder {
                     valueToSuppress = ArrayBuilders.getArrayComparator(valueToSuppress);
                 }
             }
+
             break;
         case NON_ABSENT: // new with 2.6, to support Guava/JDK8 Optionals
             // always suppress nulls
             suppressNulls = true;
             // and for referential types, also "empty", which in their case means "absent"
-            if (declaredType.isReferenceType()) {
+            if (actualType.isReferenceType()) {
                 valueToSuppress = BeanPropertyWriter.MARKER_FOR_EMPTY;
             }
             break;
@@ -115,13 +127,13 @@ public class MyPropertyBuilder extends PropertyBuilder {
         case ALWAYS: // default
         default:
             // we may still want to suppress empty collections, as per [JACKSON-254]:
-            if (declaredType.isContainerType()
+            if (actualType.isContainerType()
                     && !_config.isEnabled(SerializationFeature.WRITE_EMPTY_JSON_ARRAYS)) {
                 valueToSuppress = BeanPropertyWriter.MARKER_FOR_EMPTY;
             }
             break;
         }
-
+        
         // 修改
         String name = rename.getNewName(prov, propDef, _beanDesc, propDef.getName());
         // 变更此处为自己实现类
@@ -141,7 +153,7 @@ public class MyPropertyBuilder extends PropertyBuilder {
         }
         return bpw;
     }
-	
+    
 	public IRename getRename() {
 		return rename;
 	}

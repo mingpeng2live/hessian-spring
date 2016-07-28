@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
+import com.jsonfilter.test.Rename;
 
 /**
  * Jackson2 json化帮助类
@@ -41,8 +42,8 @@ public class Jacksons {
 //		objectMapper.setSerializationInclusion(Include.NON_EMPTY);
 		
 		// 添加修改序列化操作
-		objectMapper.setSerializerFactory(objectMapper.getSerializerFactory().withSerializerModifier(new MySerializerModifier()));
-//		objectMapper.setSerializerFactory(new MyBeanSerializerFactory(null));
+//		objectMapper.setSerializerFactory(objectMapper.getSerializerFactory().withSerializerModifier(new MySerializerModifier()));
+		objectMapper.setSerializerFactory(new MyBeanSerializerFactory(null, new Rename()));
 		
 		filterProvider = new SimpleFilterProvider();
 	}

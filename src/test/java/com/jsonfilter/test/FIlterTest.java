@@ -41,8 +41,6 @@ public class FIlterTest {
 		
 		ClassUtil cu1 = ClassUtil.getAnnotationInstance();
 		
-		
-			
 //		String s = Jacksons.me()
 //    			.addMixInAnnotations(Object.class, MyIFilter.class)
 //    			.filter("myFilter", "viewUserName", "b")
@@ -50,6 +48,7 @@ public class FIlterTest {
 		
 		String s = Jacksons.me()
     			.addMixInAnnotations(Object.class, cu1.getClassObj())
+//    			.filter(cu1.getFilterName(), "name", "propertyUserName", "b")
     			.filter(cu1.getFilterName(), "name", "b")
     			.readAsString(val);
 		

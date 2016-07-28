@@ -1,6 +1,7 @@
 package com.jsonfilter;
 
 import java.io.IOException;
+import java.util.Set;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JavaType;
@@ -22,7 +23,6 @@ import com.fasterxml.jackson.databind.util.NameTransformer;
  * @Date  2016年7月27日 下午3:58:34
  */
 public class MyBeanSerializer extends BeanSerializerBase {
-
 
 	private static final long serialVersionUID = 1L;
 
@@ -51,7 +51,7 @@ public class MyBeanSerializer extends BeanSerializerBase {
         super(src, objectIdWriter, filterId);
     }
     
-	public MyBeanSerializer(BeanSerializerBase src, String[] toIgnore) {
+	public MyBeanSerializer(BeanSerializerBase src, Set<String> toIgnore) {
         super(src, toIgnore);
     }
 
@@ -86,7 +86,7 @@ public class MyBeanSerializer extends BeanSerializerBase {
     }
 
     @Override
-    protected BeanSerializerBase withIgnorals(String[] toIgnore) {
+    protected BeanSerializerBase withIgnorals(Set<String> toIgnore) {
         return new MyBeanSerializer(this, toIgnore);
     }
 
@@ -127,7 +127,7 @@ public class MyBeanSerializer extends BeanSerializerBase {
      * {@link BeanPropertyWriter} instances.
      */
     @Override
-    public void serialize(Object bean, JsonGenerator gen, SerializerProvider provider)
+    public final void serialize(Object bean, JsonGenerator gen, SerializerProvider provider)
         throws IOException
     {
         if (_objectIdWriter != null) {
@@ -135,9 +135,7 @@ public class MyBeanSerializer extends BeanSerializerBase {
             _serializeWithObjectId(bean, gen, provider, true);
             return;
         }
-        gen.writeStartObject();
-        // [databind#631]: Assign current value, to be accessible by custom serializers
-        gen.setCurrentValue(bean);
+        gen.writeStartObject(bean);
         if (_propertyFilterId != null) {
             serializeFieldsFiltered(bean, gen, provider);
         } else {

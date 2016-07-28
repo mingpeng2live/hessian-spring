@@ -12,7 +12,9 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 
 public class CustomObjectMapper extends ObjectMapper {
 
-    private boolean camelCaseToLowerCaseWithUnderscores = false;
+	private static final long serialVersionUID = 1L;
+	
+	private boolean camelCaseToLowerCaseWithUnderscores = false;
     private String dateFormatPattern;
 
     public void setCamelCaseToLowerCaseWithUnderscores(boolean camelCaseToLowerCaseWithUnderscores) {
@@ -30,7 +32,7 @@ public class CustomObjectMapper extends ObjectMapper {
         configure(SerializationFeature.INDENT_OUTPUT, true);
         // 将驼峰转为下划线
         if (camelCaseToLowerCaseWithUnderscores) {
-            setPropertyNamingStrategy(PropertyNamingStrategy.CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES);
+            setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
         }
         // 进行日期格式化
         if (StringUtils.isNotEmpty(dateFormatPattern)) {
