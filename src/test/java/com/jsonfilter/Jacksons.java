@@ -41,8 +41,8 @@ public class Jacksons {
 //		objectMapper.setSerializationInclusion(Include.NON_EMPTY);
 		
 		// 添加修改序列化操作
-//		objectMapper.setSerializerFactory(new MyBeanSerializerFactory(null).withSerializerModifier(new MySerializerModifier()));
-		objectMapper.setSerializerFactory(new MyBeanSerializerFactory(null));
+		objectMapper.setSerializerFactory(objectMapper.getSerializerFactory().withSerializerModifier(new MySerializerModifier()));
+//		objectMapper.setSerializerFactory(new MyBeanSerializerFactory(null));
 		
 		filterProvider = new SimpleFilterProvider();
 	}
