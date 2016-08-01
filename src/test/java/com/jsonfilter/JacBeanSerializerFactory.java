@@ -17,13 +17,13 @@ import com.fasterxml.jackson.databind.ser.SerializerFactory;
  *
  * @Date  2016年7月27日 下午4:09:20
  */
-public class MyBeanSerializerFactory extends BeanSerializerFactory {
+public class JacBeanSerializerFactory extends BeanSerializerFactory {
 
 	private static final long serialVersionUID = 1L;
 	
 	private IRename rename;
 
-	public MyBeanSerializerFactory(SerializerFactoryConfig config) {
+	public JacBeanSerializerFactory(SerializerFactoryConfig config) {
 		super(config);
 		rename = new IRename() { // 默认实现返回老名称
 			@Override
@@ -35,7 +35,7 @@ public class MyBeanSerializerFactory extends BeanSerializerFactory {
 		};
 	}
 
-	public MyBeanSerializerFactory(SerializerFactoryConfig config, IRename rename) {
+	public JacBeanSerializerFactory(SerializerFactoryConfig config, IRename rename) {
 		super(config);
 		this.rename = rename;
 	}
@@ -43,13 +43,13 @@ public class MyBeanSerializerFactory extends BeanSerializerFactory {
 	@Override
     protected PropertyBuilder constructPropertyBuilder(SerializationConfig config,
     		BeanDescription beanDesc) {
-    	return new MyPropertyBuilder(config, beanDesc, rename);
+    	return new JacPropertyBuilder(config, beanDesc, rename);
     }
     
     @Override
     protected BeanSerializerBuilder constructBeanSerializerBuilder(
     		BeanDescription beanDesc) {
-    	return new MyBeanSerializerBuilder(beanDesc);
+    	return new JacBeanSerializerBuilder(beanDesc);
     }
     
     @Override
@@ -58,12 +58,12 @@ public class MyBeanSerializerFactory extends BeanSerializerFactory {
         if (_factoryConfig == config) {
             return this;
         }
-        if (getClass() != MyBeanSerializerFactory.class) {
+        if (getClass() != JacBeanSerializerFactory.class) {
             throw new IllegalStateException("Subtype of BeanSerializerFactory ("+getClass().getName()
                     +") has not properly overridden method 'withAdditionalSerializers': can not instantiate subtype with "
                     +"additional serializer definitions");
         }
-        return new MyBeanSerializerFactory(config);
+        return new JacBeanSerializerFactory(config);
     }
 
 	public IRename getRename() {

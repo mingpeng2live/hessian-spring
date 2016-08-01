@@ -22,11 +22,11 @@ import com.fasterxml.jackson.databind.util.NameTransformer;
  *
  * @Date  2016年7月27日 下午3:58:34
  */
-public class MyBeanSerializer extends BeanSerializerBase {
+public class JacBeanSerializer extends BeanSerializerBase {
 
 	private static final long serialVersionUID = 1L;
 
-	public MyBeanSerializer(JavaType type, BeanSerializerBuilder builder,
+	public JacBeanSerializer(JavaType type, BeanSerializerBuilder builder,
             BeanPropertyWriter[] properties, BeanPropertyWriter[] filteredProperties)
     {
         super(type, builder, properties, filteredProperties);
@@ -34,24 +34,24 @@ public class MyBeanSerializer extends BeanSerializerBase {
     
     /**
      * Alternate copy constructor that can be used to construct
-     * standard {@link MyBeanSerializer} passing an instance of
+     * standard {@link JacBeanSerializer} passing an instance of
      * "compatible enough" source serializer.
      */
-	public MyBeanSerializer(BeanSerializerBase src) {
+	public JacBeanSerializer(BeanSerializerBase src) {
         super(src);
     }
 
-	public MyBeanSerializer(BeanSerializerBase src,
+	public JacBeanSerializer(BeanSerializerBase src,
             ObjectIdWriter objectIdWriter) {
         super(src, objectIdWriter);
     }
 
-	public MyBeanSerializer(BeanSerializerBase src,
+	public JacBeanSerializer(BeanSerializerBase src,
             ObjectIdWriter objectIdWriter, Object filterId) {
         super(src, objectIdWriter, filterId);
     }
     
-	public MyBeanSerializer(BeanSerializerBase src, Set<String> toIgnore) {
+	public JacBeanSerializer(BeanSerializerBase src, Set<String> toIgnore) {
         super(src, toIgnore);
     }
 
@@ -65,9 +65,9 @@ public class MyBeanSerializer extends BeanSerializerBase {
      * Method for constructing dummy bean serializer; one that
      * never outputs any properties
      */
-    public static MyBeanSerializer createDummy(JavaType forType)
+    public static JacBeanSerializer createDummy(JavaType forType)
     {
-        return new MyBeanSerializer(forType, null, NO_PROPS, null);
+        return new JacBeanSerializer(forType, null, NO_PROPS, null);
     }
 
     @Override
@@ -77,17 +77,17 @@ public class MyBeanSerializer extends BeanSerializerBase {
 
     @Override
     public BeanSerializerBase withObjectIdWriter(ObjectIdWriter objectIdWriter) {
-        return new MyBeanSerializer(this, objectIdWriter, _propertyFilterId);
+        return new JacBeanSerializer(this, objectIdWriter, _propertyFilterId);
     }
 
     @Override
     public BeanSerializerBase withFilterId(Object filterId) {
-        return new MyBeanSerializer(this, _objectIdWriter, filterId);
+        return new JacBeanSerializer(this, _objectIdWriter, filterId);
     }
 
     @Override
     protected BeanSerializerBase withIgnorals(Set<String> toIgnore) {
-        return new MyBeanSerializer(this, toIgnore);
+        return new JacBeanSerializer(this, toIgnore);
     }
 
     /**

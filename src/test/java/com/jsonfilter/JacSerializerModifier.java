@@ -20,7 +20,7 @@ import com.fasterxml.jackson.databind.util.NameTransformer;
  *
  * @Date  2016年7月28日 下午2:59:35
  */
-public class MySerializerModifier extends BeanSerializerModifier {
+public class JacSerializerModifier extends BeanSerializerModifier {
 	
 	private PropertyNameTransformer propertyNameTransformer = new PropertyNameTransformer();
 

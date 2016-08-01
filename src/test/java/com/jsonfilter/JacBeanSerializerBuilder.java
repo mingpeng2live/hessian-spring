@@ -5,15 +5,15 @@ import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.ser.BeanPropertyWriter;
 import com.fasterxml.jackson.databind.ser.BeanSerializerBuilder;
 
-public class MyBeanSerializerBuilder extends BeanSerializerBuilder {
+public class JacBeanSerializerBuilder extends BeanSerializerBuilder {
 
 	protected final static BeanPropertyWriter[] NO_PROPERTIES = new BeanPropertyWriter[0];
 
-	public MyBeanSerializerBuilder(BeanDescription beanDesc) {
+	public JacBeanSerializerBuilder(BeanDescription beanDesc) {
 		super(beanDesc);
 	}
 
-	public MyBeanSerializerBuilder(BeanSerializerBuilder src) {
+	public JacBeanSerializerBuilder(BeanSerializerBuilder src) {
 		super(src);
 	}
 	
@@ -30,7 +30,7 @@ public class MyBeanSerializerBuilder extends BeanSerializerBuilder {
         } else {
             properties = _properties.toArray(new BeanPropertyWriter[_properties.size()]);
         }
-        return new MyBeanSerializer(_beanDesc.getType(), this,
+        return new JacBeanSerializer(_beanDesc.getType(), this,
                 properties, _filteredProperties);
     }
     

@@ -23,17 +23,17 @@ import com.fasterxml.jackson.databind.util.NameTransformer;
  *
  * @Date  2016年7月27日 下午3:57:50
  */
-public class MyPropertyBuilder extends PropertyBuilder {
+public class JacPropertyBuilder extends PropertyBuilder {
 
 	/** 修改当前属性名的接口 */
 	private IRename rename;
 	
-	public MyPropertyBuilder(SerializationConfig config,
+	public JacPropertyBuilder(SerializationConfig config,
 			BeanDescription beanDesc) {
 		super(config, beanDesc);
 	}
 
-	public MyPropertyBuilder(SerializationConfig config,
+	public JacPropertyBuilder(SerializationConfig config,
 			BeanDescription beanDesc, IRename rename) {
 		super(config, beanDesc);
 		this.rename = rename;
@@ -137,7 +137,7 @@ public class MyPropertyBuilder extends PropertyBuilder {
         // 修改
         String name = rename.getNewName(prov, propDef, _beanDesc, propDef.getName());
         // 变更此处为自己实现类
-        BeanPropertyWriter bpw = new MyBeanPropertyWriter(propDef,
+        BeanPropertyWriter bpw = new JacBeanPropertyWriter(propDef,
                 am, _beanDesc.getClassAnnotations(), declaredType,
                 ser, typeSer, serializationType, suppressNulls, valueToSuppress, name);
 

@@ -24,29 +24,29 @@ import com.fasterxml.jackson.databind.util.NameTransformer;
  * @Date  2016年7月26日 下午3:37:17
  */
 @JacksonStdImpl
-public class MyBeanPropertyWriter extends BeanPropertyWriter {
+public class JacBeanPropertyWriter extends BeanPropertyWriter {
 
 	private static final long serialVersionUID = 1L;
 
 	protected SerializedString _name;
 	
-	public MyBeanPropertyWriter() {
+	public JacBeanPropertyWriter() {
 		super();
 	}
 	
-	public MyBeanPropertyWriter(BeanPropertyWriter base) {
+	public JacBeanPropertyWriter(BeanPropertyWriter base) {
 		super(base);
 	}
 
-	public MyBeanPropertyWriter(BeanPropertyWriter base, PropertyName name) {
+	public JacBeanPropertyWriter(BeanPropertyWriter base, PropertyName name) {
 		super(base, name);
 	}
 
-	public MyBeanPropertyWriter(BeanPropertyWriter base, SerializedString name) {
+	public JacBeanPropertyWriter(BeanPropertyWriter base, SerializedString name) {
 		super(base, name);
 	}
 	
-	public MyBeanPropertyWriter(BeanPropertyDefinition propDef,
+	public JacBeanPropertyWriter(BeanPropertyDefinition propDef,
 			AnnotatedMember member, Annotations contextAnnotations,
 			JavaType declaredType, JsonSerializer<?> ser,
 			TypeSerializer typeSer, JavaType serType, boolean suppressNulls,
@@ -65,7 +65,7 @@ public class MyBeanPropertyWriter extends BeanPropertyWriter {
     }
 	
     public BeanPropertyWriter _new(PropertyName newName) {
-        return new MyBeanPropertyWriter(this, newName);
+        return new JacBeanPropertyWriter(this, newName);
     }
     
     public void rename(String name) {
