@@ -236,11 +236,11 @@ public class ConsumConcurrentHashMap<K, V> extends ConcurrentHashMap<K, V> {
 	 * @Date  2015年7月17日 下午6:00:46
 	 */
 	/**
-	 * @author admaster
+	 * @author pm
 	 *
 	 */
 	/**
-	 * @author admaster
+	 * @author pm
 	 *
 	 */
 	protected final class ConsumerRunnable implements Runnable {

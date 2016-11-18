@@ -17,7 +17,7 @@ import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter.SerializeExceptFilter;
 
 /**
- * @author admaster
+ * @author pm
  *
  */
 public class FiledSerializeExceptFilter extends SerializeExceptFilter {
